@@ -1,0 +1,63 @@
+﻿@model FaculdadeXPTO.Models.Turma
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Turma</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+    </dl>
+
+    <div class="well">
+        <div id="gridDisCheck" class="form-group">
+            <label>Disciplinas</label>
+
+            @foreach (var item in Model.disciplinas)
+            {
+                <div class="checkbox">
+                    <label>
+                        <span type="checkbox" value="@item.Id" /> @item.Nome
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="well">
+        <div id="gridCheck" class="form-group">
+            <label>Alunos</label>
+
+            @foreach (var item in Model.alunos)
+            {
+                <div class="checkbox">
+                    <label>
+                        <span type="checkbox" value="@item.Id" /> @item.Nome
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Deletar" class="btn btn-default" /> |
+            @Html.ActionLink("Voltar para lista", "Index")
+        </div>
+    }
+</div>

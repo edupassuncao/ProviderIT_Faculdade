@@ -1,0 +1,75 @@
+﻿@model FaculdadeXPTO.Models.Turma
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Turma</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+    </dl>
+
+    <div class="well">
+        <div id="gridDisCheck" class="form-group">
+            <label>Disciplinas</label>
+
+            @foreach (var item in Model.disciplinas)
+            {
+                <div class="checkbox">
+                    <label>
+                        <span type="checkbox" value="@item.Id" /> @item.Nome
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="well">
+        <div id="gridCheck" class="form-group">
+            <label>Alunos</label>
+
+            @foreach (var item in Model.alunos)
+            {
+                <div class="checkbox">
+                    <label>
+                        <span type="checkbox" value="@item.Id" /> @item.Nome
+                    </label>
+                </div>
+            }
+        </div>
+    </div>
+
+
+</div>
+<p>
+    @Html.ActionLink("editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Voltar para lista", "Index")
+</p>
+
+<style>
+    
+.dl-horizontal dt {
+    float: left;
+    width: 66px;
+    overflow: hidden;
+    clear: left;
+    /* text-align: right; */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+    .dl-horizontal dd {
+        margin-left: 100px;
+    }
+</style>

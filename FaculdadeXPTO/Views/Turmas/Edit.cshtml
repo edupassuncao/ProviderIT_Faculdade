@@ -1,0 +1,138 @@
+﻿@model FaculdadeXPTO.Models.Turma
+
+@{
+    ViewBag.Title = "Editar Turma";
+}
+
+<h2>Editar Turma</h2>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        var doc = $(document);
+
+        doc.on("click", "#savebutton", function () {
+
+
+            var turma = {
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            };
+
+            turma.id = '@Model.Id'
+
+            turma.Disciplinas = [];
+
+            $('#gridDisCheck').find("input").each(function () {
+                if (this.checked)
+                    turma.Disciplinas.push(this.value);
+            });
+
+
+            turma.Alunos = [];
+
+            $('#gridCheck').find("input").each(function () {
+                if(this.checked)
+                    turma.Alunos.push(this.value);
+            });
+
+            turma.NomeTurma = $('#Nome').val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("EditarTurma", "Turmas"))",
+                data: turma
+            })
+                .done(function (response) {
+                    window.location = "/Turmas/index";
+                });
+        });
+
+    });
+</script>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4></h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="well">
+            <div id="gridDisCheck" class="form-group">
+                <label>Disciplinas</label>
+
+                @foreach (var item in Model.disciplinas)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="@item.Id" checked="@item.IsChecked" /> @item.Nome
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+
+        <div class="well">
+            <div id="gridCheck" class="form-group">
+                <label>Alunos</label>
+
+                @foreach (var item in Model.alunos)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="@item.Id" checked="@item.IsChecked" /> @item.Nome
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="savebutton" value="Salvar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<style>
+
+    .form-horizontal .control-label {
+        text-align: left !important;
+    }
+
+    .col-md-2 {
+        width: 4.666667%;
+    }
+
+    .col-md-offset-2 {
+        margin-left: 0;
+    }
+</style>

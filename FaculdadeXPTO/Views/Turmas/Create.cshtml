@@ -1,0 +1,154 @@
+﻿@model FaculdadeXPTO.Models.Turma
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<script>
+
+    $(document).ready(function () {
+
+
+        var doc = $(document);
+        
+
+        doc.on("click", "#salvarTurma", function () {
+
+            var turma = {
+            };
+
+            turma.NomeTurma = $('#Nome').val();
+
+            turma.Disciplinas = [];
+
+            $('#gridDisCheck').find("input").each(function () {
+                if (this.checked)
+                    turma.Disciplinas.push(this.value);
+            });
+
+
+            turma.Alunos = [];
+
+            $('#gridCheck').find("input").each(function () {
+                if(this.checked)
+                    turma.Alunos.push(this.value);
+            });
+
+
+
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("SalvarTurma", "Turmas"))",
+                data: turma
+            })
+                .done(function (response) {
+                    window.location = "index";
+                });
+
+
+        });
+    });
+
+
+
+</script>
+
+<h2>Criar Turma</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4></h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.disciplinas, "Disciplinas", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">*@
+        @*@Html.DropDownListFor(model => model.disciplinas, new SelectList(Model.disciplinas, "Id", "Nome"), new { @class = "form-control multiselect" })*@
+
+        @*@Html.DropDownList("disciplinas", new SelectList(Model.disciplinas, "Id", "Nome"), new { @class = "form-control select2" })*@
+
+        @*@Html.ListBox("disciplinas", Model.disciplinasMulti, new { @class = "multiselect", @id = "disciplinas", @style = "margin-left: 15px;", @multiple = "multiple" })*@
+
+        @*@Html.ListBoxFor(x => x.disciplinas, Model.disciplinasMulti)*@
+
+        @*@Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+        <div class="well">
+            <div id="gridDisCheck" class="form-group">
+                <label>Disciplinas</label>
+
+                @foreach (var item in Model.disciplinas)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="@item.Id" /> @item.Nome
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+
+        <div class="well">
+            <div id="gridCheck" class="form-group">
+                <label>Alunos</label>
+
+                @foreach (var item in Model.alunos)
+                {
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="@item.Id" /> @item.Nome
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Criar" class="btn btn-default" id="salvarTurma" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar", "Index")
+</div>
+
+@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+
+
+<style>
+
+    .form-horizontal .control-label {
+        text-align: left !important;
+    }
+
+    .col-md-2 {
+        width: 4.666667%;
+    }
+    .col-md-offset-2 {
+        margin-left: 0;
+    }
+
+</style>
